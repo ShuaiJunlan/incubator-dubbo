@@ -27,6 +27,7 @@
     <groupId>org.apache.dubbo</groupId>
     <artifactId>dubbo-parent</artifactId>
     <version>${revision}</version>
+
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
