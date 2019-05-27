@@ -25,9 +25,8 @@
     </parent>
 
     <groupId>org.apache.dubbo</groupId>
-    <artifactId>dubbo-parent</artifactId>
     <version>${revision}</version>
-
+    <artifactId>incubator-dubbo</artifactId>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
