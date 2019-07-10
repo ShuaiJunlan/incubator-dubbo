@@ -1,0 +1,16 @@
+@startuml
+title Dubbo服务
+
+' config
+interface Server
+abstract AbstractPeer
+abstract AbstractEndpoint
+abstract AbstractServer
+class NettyServer
+
+Server <|-- AbstractPeer
+AbstractPeer <|-- AbstractEndpoint
+AbstractEndpoint <|-- AbstractServer
+AbstractServer <|-- NettyServer
+
+@enduml 

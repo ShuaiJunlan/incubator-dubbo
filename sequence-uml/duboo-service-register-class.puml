@@ -1,0 +1,44 @@
+@startuml
+title Dubbo服务与注册类图
+
+' config
+abstract AbstractConfig
+abstract AbstractMethodConfig
+abstract AbstractInterfaceConfig
+abstract AbstractServiceConfig
+class ServiceConfig
+
+AbstractConfig <|-- AbstractMethodConfig
+AbstractMethodConfig <|-- AbstractInterfaceConfig
+AbstractInterfaceConfig <|-- AbstractServiceConfig
+AbstractServiceConfig <|-- ServiceConfig
+
+class ProtocolConfig
+AbstractConfig <|-- ProtocolConfig
+
+' protocol
+interface Protocol
+abstract AbstractProtocol
+class Protocol$Adaptive 
+class RegistryProtocol
+class DubboProtocol
+Protocol <|-- AbstractProtocol
+Protocol <|-- Protocol$Adaptive
+Protocol <|-- RegistryProtocol
+AbstractProtocol <|-- DubboProtocol
+
+' registry
+interface Registry
+abstract AbstractRegistry
+abstract FailbackRegistry
+class MulticastRegistry
+Registry <|-- AbstractRegistry
+AbstractRegistry <|-- FailbackRegistry
+FailbackRegistry <|-- MulticastRegistry
+
+
+ServiceConfig *-- Protocol$Adaptive
+Protocol$Adaptive *-- RegistryProtocol 
+RegistryProtocol *-- MulticastRegistry
+
+@enduml 

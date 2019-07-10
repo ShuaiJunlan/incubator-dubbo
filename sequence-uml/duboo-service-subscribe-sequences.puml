@@ -1,0 +1,27 @@
+@startuml
+title Dubbo服务发现时序图
+autonumber
+
+actor Consumer
+Consumer -> ReferenceConfig: get()
+ReferenceConfig -> ReferenceConfig: init()
+ReferenceConfig -> ReferenceConfig: createProxy()
+ReferenceConfig -> "Protocol$Adaptive": refer()
+"Protocol$Adaptive" -> RegistryProtocol: refer()
+RegistryProtocol -> RegistryProtocol: doRefer()
+
+group do consumer register
+    RegistryProtocol -> MulticastRegistry: register()
+    MulticastRegistry -> FailbackRegistry: register()
+    FailbackRegistry -> MulticastRegistry: doRegister()
+end
+
+group do consuemr subscribe
+    RegistryProtocol -> RegistryDirectory: subscribe()
+    RegistryDirectory -> MulticastRegistry: subscribe()
+    MulticastRegistry -> FailbackRegistry: subscribe()
+    FailbackRegistry -> MulticastRegistry: doSubscribe()
+end 
+
+RegistryProtocol --> ReferenceConfig: return invoker
+@enduml
