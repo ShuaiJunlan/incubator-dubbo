@@ -36,7 +36,7 @@ import java.util.Set;
 
 import static org.apache.dubbo.common.constants.CommonConstants.DEFAULT_TIMEOUT;
 import static org.apache.dubbo.common.constants.CommonConstants.TIMEOUT_KEY;
-import static org.apache.dubbo.common.constants.ConfigConstants.CLUSTER_KEY;
+import static org.apache.dubbo.common.constants.CommonConstants.CLUSTER_KEY;
 import static org.apache.dubbo.metadata.identifier.MetadataIdentifier.META_DATA_STORE_TAG;
 
 /**
@@ -44,6 +44,7 @@ import static org.apache.dubbo.metadata.identifier.MetadataIdentifier.META_DATA_
  */
 public class RedisMetadataReport extends AbstractMetadataReport {
 
+    private final static String REDIS_DATABASE_KEY = "database";
     private final static Logger logger = LoggerFactory.getLogger(RedisMetadataReport.class);
 
     JedisPool pool;
@@ -62,7 +63,8 @@ public class RedisMetadataReport extends AbstractMetadataReport {
                 jedisClusterNodes.add(new HostAndPort(tmpUrl.getHost(), tmpUrl.getPort()));
             }
         } else {
-            pool = new JedisPool(new JedisPoolConfig(), url.getHost(), url.getPort(), timeout, url.getPassword());
+            int database = url.getParameter(REDIS_DATABASE_KEY, 0);
+            pool = new JedisPool(new JedisPoolConfig(), url.getHost(), url.getPort(), timeout, url.getPassword(), database);
         }
     }
 

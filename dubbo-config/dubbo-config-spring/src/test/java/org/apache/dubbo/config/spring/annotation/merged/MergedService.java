@@ -14,35 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.dubbo.config.spring.annotation.merged;
 
-package org.apache.dubbo.common.constants;
 
-/**
- * ConfigConstants
- */
-public interface ConfigConstants {
-    String CLUSTER_KEY = "cluster";
+import org.apache.dubbo.config.annotation.Service;
+import org.springframework.core.annotation.AliasFor;
 
-    String USERNAME_KEY = "username";
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.annotation.ElementType;
 
-    String PASSWORD_KEY = "password";
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+@Service
+public @interface MergedService {
 
-    String HOST_KEY = "host";
+    @AliasFor(annotation = Service.class, attribute = "group")
+    String group() default "dubbo";
 
-    String PORT_KEY = "port";
-
-    String DUBBO_IP_TO_BIND = "DUBBO_IP_TO_BIND";
-
-    @Deprecated
-    String SHUTDOWN_WAIT_SECONDS_KEY = "dubbo.service.shutdown.wait.seconds";
-
-    String SHUTDOWN_WAIT_KEY = "dubbo.service.shutdown.wait";
-
-    String DUBBO_PROTOCOL = "dubbo";
-
-    String QOS_ENABLE = "qos-enable";
-
-    String QOS_PORT = "qos-port";
-
-    String ACCEPT_FOREIGN_IP = "qos-accept-foreign-ip";
+    @AliasFor(annotation = Service.class, attribute = "version")
+    String version() default "1.0.0";
 }
