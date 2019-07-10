@@ -1,0 +1,33 @@
+@startuml
+title Dubbo服务端---服务发布及响应时序图
+Actor Actor
+Actor -> Bootstrap: Bootstrapping
+Bootstrap -> ServiceBean: onApplicationEvent()
+ServiceBean -> ServiceConfig: export()
+ServiceConfig -> ServiceConfig: doExport()
+ServiceConfig -> ServiceConfig: doExportUrls()
+ServiceConfig -> ServiceConfig: doExportUrlsFor1Protocol()
+alt local[Injvm]
+ServiceConfig -> ServiceConfig: exportLocal()
+ServiceConfig -> "Protocol$Adaptive": Dubbo SPI
+"Protocol$Adaptive" -> InjvmProtocol: export()
+InjvmProtocol -> InjvmExporter: new InjvmExporter()
+else remote[Dubbo]
+ServiceConfig -> "Protocol$Adaptive": export()
+"Protocol$Adaptive" -> DubboProtocol: export()
+DubboProtocol -> DubboProtocol: openServer()
+DubboProtocol -> DubboProtocol: createServer()
+DubboProtocol -> Exchangers: bind()
+Exchangers -> Exchangers: bind()
+Exchangers -> Exchangers: getExchanger()
+Exchangers -> HeaderExchanger: bind()
+HeaderExchanger -> HeaderExchangerServer: new HeaderExchangerServer()
+HeaderExchangerServer -> Transporters: bind()
+Transporters -> Transporters: getTransporter()
+Transporters -> "Transporter$Adaptive": bind()
+"Transporter$Adaptive" -> NettyTransporter: Dubbo SPI
+NettyTransporter -> NettyServer: new NettyServer()
+NettyServer -> AbstractServer: super()
+AbstractServer -> NettyServer: doOpen()
+end
+@enduml

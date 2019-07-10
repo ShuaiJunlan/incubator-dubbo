@@ -1,0 +1,38 @@
+@startuml
+title Dubbo服务发布与注册时序图
+autonumber
+actor Provider
+Provider -> ServiceConfig: export()
+ServiceConfig -> ServiceConfig: doExport()
+ServiceConfig -> ServiceConfig: doExportUrls()
+ServiceConfig -> ServiceConfig: doExportUrlsFor1Protocol()
+
+ServiceConfig -> "Protocol$Adaptive": export()
+"Protocol$Adaptive" -> RegistryProtocol: export()
+
+group service export
+    ' export service
+    RegistryProtocol -> RegistryProtocol: doLocalExport()
+    RegistryProtocol -> "Protocol$Adaptive": export()
+    "Protocol$Adaptive" -> DubboProtocol: export()
+    DubboProtocol -> DubboProtocol: opernServer()
+    DubboProtocol -> DubboProtocol: createServer()
+    DubboProtocol -> Exchangers: bind()
+    Exchangers -> HeaderExchanger: bind()
+    HeaderExchanger -> Transporters: bind()
+    Transporters -> "Transporter$Adaptive": bind()
+    "Transporter$Adaptive" -> NettyTransporter: bind()
+    NettyTransporter -> NettyServer: new NettyServer()
+    NettyServer -> AbstractServer: super()
+    AbstractServer -> NettyServer: doOpen()
+end 
+
+group service registry
+    RegistryProtocol -> RegistryProtocol: register()
+    RegistryProtocol -> "RegistryFactory$Adaptive": register()
+    "RegistryFactory$Adaptive" -> MulticastRegistry: register()
+    MulticastRegistry -> FailbackRegistry: register()
+    FailbackRegistry -> MulticastRegistry: doRegister()
+end
+
+@enduml

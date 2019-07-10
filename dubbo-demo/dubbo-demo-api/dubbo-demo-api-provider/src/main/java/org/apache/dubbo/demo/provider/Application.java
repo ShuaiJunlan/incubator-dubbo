@@ -22,6 +22,9 @@ import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.config.ServiceConfig;
 import org.apache.dubbo.demo.DemoService;
+import org.apache.dubbo.rpc.service.GenericService;
+
+import java.io.IOException;
 
 public class Application {
     /**
@@ -29,11 +32,47 @@ public class Application {
      * launch the application
      */
     public static void main(String[] args) throws Exception {
+        export();
+        // asyncExport();
+        // genericExport();
+    }
+
+    private static void export() throws IOException {
         ServiceConfig<DemoServiceImpl> service = new ServiceConfig<>();
+        service.setRef(new DemoServiceImpl());
+
+        // ServiceConfig<AsyncServiceImpl> service = new ServiceConfig<>();
+        // service.setRef(new AsyncServiceImpl());
+
         service.setApplication(new ApplicationConfig("dubbo-demo-api-provider"));
         service.setRegistry(new RegistryConfig("multicast://224.5.6.7:1234"));
         service.setInterface(DemoService.class);
-        service.setRef(new DemoServiceImpl());
+        // service.setRetries(10); //retries
+        service.export();
+        System.in.read();
+    }
+
+    private static void asyncExport() throws IOException {
+        ServiceConfig<AsyncServiceImpl> service = new ServiceConfig<>();
+        service.setRef(new AsyncServiceImpl());
+
+        service.setApplication(new ApplicationConfig("dubbo-demo-api-provider"));
+        service.setRegistry(new RegistryConfig("multicast://224.5.6.7:1234"));
+        service.setInterface(DemoService.class);
+        // service.setRetries(10); //retries
+        service.export();
+        System.in.read();
+    }
+
+    private static void genericExport() throws IOException {
+        ServiceConfig<GenericService> service = new ServiceConfig<>();
+        service.setRef(new GenericServiceImpl());
+
+        service.setApplication(new ApplicationConfig("dubbo-demo-api-provider"));
+        service.setRegistry(new RegistryConfig("multicast://224.5.6.7:1234"));
+        service.setInterface(DemoService.class);
+        service.setGeneric("true");
+        // service.setRetries(10); //retries
         service.export();
         System.in.read();
     }

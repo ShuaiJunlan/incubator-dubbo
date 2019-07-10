@@ -150,7 +150,7 @@ public class Application {
 
 ```bash
 # mvn clean package
-# mvn -Djava.net.preferIPv4Stack=true -Dexec.mainClass=org.apache.dubbo.demo.consumer.Application exec:java
+# mvn -Djava.net.preferIPv4Stack=true -Dexec.mainClass=org.apache.dubbo.demo.consumer.ApplicationConsumer exec:java
 ```
 
 The consumer will print out `Hello world` on the screen.
