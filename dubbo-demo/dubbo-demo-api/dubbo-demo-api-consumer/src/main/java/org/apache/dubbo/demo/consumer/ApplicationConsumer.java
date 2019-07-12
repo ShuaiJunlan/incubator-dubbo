@@ -60,10 +60,9 @@ public class ApplicationConsumer {
         //
         // TimeUnit.MINUTES.sleep(10);
 
-        // invoke();
-        // invoke();
+        invoke();
 
-        genericInvoke();
+        // genericInvoke();
         // genericInvoke1();
 
     }
